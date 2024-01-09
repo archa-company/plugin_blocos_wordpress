@@ -25,7 +25,7 @@ if(isset($_POST["category"])&&isset($_POST["data"])&&trim(get_option('fbg-plugin
    'ACL'=>'public-read',
    'ContentType'=>'application/json',
    'Key'=>trim(get_option('fbg-plugin-path','')).'/'.explode(';',$_POST["category"])[1].'.json',
-   'Body'=>'{"category":'.$cat.',"data":'.str_replace('\\"','"',$_POST["data"]).',"isAuthor":'.(isset($_POST["isAuthor"])?'true':'false').',"title":'.(isset($_POST["isAuthor"])?'null':'"'.$_POST["title"].'"').'}'
+   'Body'=>'{"category":'.$cat.',"data":'.str_replace('\\"','"',$_POST["data"]).',"isDefault":'.(isset($_POST["isDefault"])?'true':'false').',"title":'.(isset($_POST["isAuthor"])?'null':'"'.$_POST["title"].'"').'}'
   ]);
  }catch(Exception $exception){
   $message='Erro na criação dos dados';

@@ -352,47 +352,7 @@ window.fbgposts=[];
   },
   save:x=>e(
    'div',
-   p.save(),
-   e(
-    'h1',
-    null,
-    x.attributes.title||''
-   ),
-   e(
-    h.Content,
-    {
-     tagName:'p',
-     value:x.attributes.content
-    }
-   ),
-   e(
-    'ul',
-    null,
-    x.attributes.list.map(l=>
-     e('li',{key:l},
-      e(
-       'input',
-       {
-         type:'radio',
-         name:'choice',
-         value:l
-       }
-      ),
-      e('span',null,l)
-     )
-    )
-   ),
-   e(
-    'div',
-    null,
-    e(
-     'input',
-     {
-      type:'button',
-      value:x.attributes.button||'Enviar'
-     }
-    )
-   )
+   p.save()
   )
  });
  l.b.registerBlockType('fbg-plugin/newsletter',{
@@ -810,64 +770,7 @@ window.fbgposts=[];
   ),
   save:x=>e(
    'div',
-   p.save(),
-   e(
-    'h1',
-    null,
-    x.attributes.title||''
-   ),
-   e(
-    h.Content,
-    {
-     tagName:'p',
-     value:x.attributes.content
-    }
-   ),
-   e(
-    'ul',
-    null,
-    x.attributes.list.map(l=>
-     e('li',{key:l.name},
-      e(
-       'input',
-       {
-        type:['text','email','password','number','date','time'].includes(l.type)?l.type:'text',
-        name:l.name.replace(/\s+/g,'_').replace(/[^\w_]/g,''),
-        placeholder:l.default,
-        value:''
-       }
-      )
-     )
-    )
-   ),
-   e(
-    'div',
-    null,
-    e(
-     'input',
-     {
-      scale:'1.5',
-      accentColor:'#ff7f00',
-      type:'radio',
-      name:'choice',
-      value:'termsOfUse'
-     }
-    ),
-    'Declaro que li e concordo com os ',
-    e('a',{href:x.attributes.termsOfUse},'Termos de Uso'),
-    '.'
-   ),
-   e(
-    'div',
-    null,
-    e(
-     'input',
-     {
-      type:'button',
-      value:x.attributes.button||'Enviar'
-     }
-    )
-   )
+   p.save()
   )
  });
  l.b.registerBlockType('fbg-plugin/hights',{
@@ -940,11 +843,11 @@ window.fbgposts=[];
         'li',
         {
          key:l.externalId,
-         data:l.externalId,
+         data:l.id,
          draggable:true,
          onDrop:e=>fbgSelect.dragEnd((e,y)=>x.setAttributes({
           posts:x.attributes.posts.slice()
-           .reorder(y,'externalId').slice()
+           .reorder(y).slice()
          })),
          onDragOver:e=>fbgSelect.dragOver(e),
          onDrag:e=>fbgSelect.dragStart(e)
@@ -1061,14 +964,7 @@ window.fbgposts=[];
   ),
   save:x=>e(
    'div',
-   p.save(),
-   e(
-    'ul',
-    null,
-    x.attributes.posts.map(l=>
-     e('li',{key:l.externalId},l.title)
-    )
-   )
+   p.save()
   )
  });
  l.b.registerBlockType('fbg-plugin/postview',{
@@ -1339,11 +1235,11 @@ window.fbgposts=[];
         'li',
         {
          key:l.externalId,
-         data:l.externalId,
+         data:l.id,
          draggable:true,
          onDrop:e=>fbgSelect.dragEnd(e,y=>x.setAttributes({
           posts:x.attributes.posts.slice()
-           .reorder(y,'externalId').slice()
+           .reorder(y).slice()
          })),
          onDragOver:e=>fbgSelect.dragOver(e),
          onDrag:e=>fbgSelect.dragStart(e)
@@ -1598,14 +1494,312 @@ window.fbgposts=[];
   ),
   save:x=>e(
    'div',
-   p.save(),
+   p.save()
+  )
+ });
+ l.b.registerBlockType('fbg-plugin/recipes',{
+  title:'Receitas',
+  description:'Bloco de receitas na página',
+  icon:'welcome-write-blog',
+  category:'fbg-plugin-category',
+  attributes:{
+   title:{
+    type:'string',
+    default:''
+   },
+   subtitle:{
+    type:'string',
+    default:''
+   },
+   time:{
+    type:'string',
+    default:''
+   },
+   yield:{
+    type:'string',
+    default:''
+   },
+   level:{
+    type:'string',
+    default:''
+   },
+   recipes:{
+    type:'array',
+    default:[]
+   }
+  },
+  edit:x=>e(
+   'div',
+   {style:{display:'flex',flexDirection:'column'}},
    e(
-    'ul',
+    'h1',
     null,
-    x.attributes.posts.map(l=>
-     e('li',{key:l.externalId},l.title)
+    'Bloco de receitas'
+   ),
+   e(
+    'table',
+    {
+     collapse:'collapse',
+     cellpadding:0,
+     cellspacing:8,
+     border:0
+    },
+    e(
+     'tr',
+     null,
+     e('td',{width:'1%',style:{whiteSpace:'nowrap'}},'Título:'),
+     e(
+      'td',
+      null,
+      e(
+       'input',
+       {
+        value:x.attributes.title,
+        type:'text',
+        className:'FBGinput',
+        onChange:n=>x.setAttributes({title:n.target.value})
+       }
+      )
+     )
+    ),
+    e(
+     'tr',
+     null,
+     e('td',{width:'1%',style:{whiteSpace:'nowrap'}},'Subtítulo/Cheff:'),
+     e(
+      'td',
+      null,
+      e(
+       'input',
+       {
+        value:x.attributes.subtitle,
+        type:'text',
+        className:'FBGinput',
+        onChange:n=>x.setAttributes({subtitle:n.target.value})
+       }
+      )
+     )
+    ),
+    e(
+     'tr',
+     null,
+     e('td',{width:'1%',style:{whiteSpace:'nowrap'}},'Tempo de preparo:'),
+     e(
+      'td',
+      null,
+      e(
+       'input',
+       {
+        value:x.attributes.time,
+        type:'text',
+        className:'FBGinput',
+        onChange:n=>x.setAttributes({time:n.target.value})
+       }
+      )
+     )
+    ),
+    e(
+     'tr',
+     null,
+     e('td',{width:'1%',style:{whiteSpace:'nowrap'}},'Rendimento:'),
+     e(
+      'td',
+      null,
+      e(
+       'input',
+       {
+        value:x.attributes.yield,
+        type:'text',
+        className:'FBGinput',
+        onChange:n=>x.setAttributes({yield:n.target.value})
+       }
+      )
+     )
+    ),
+    e(
+     'tr',
+     null,
+     e('td',{width:'1%',style:{whiteSpace:'nowrap'}},'Grau de dificuldade:'),
+     e(
+      'td',
+      null,
+      e(
+       'select',
+       {
+        style:{
+         width:'100%'
+        },
+        value:x.attributes.level,
+        className:'FBGselect',
+        onChange:n=>x.setAttributes({level:n.target.value})
+       },
+       e('option',{value:'Fácil'},'Fácil'),
+       e('option',{value:'Médio'},'Médio'),
+       e('option',{value:'Difícil'},'Difícil')
+      )
+     )
+    )
+   ),
+   (x.attributes.recipes.length?x.attributes.recipes:[{ingredients:[],method:[]}]).map((_,i)=>
+    e(
+     'div',
+     null,
+     e(
+      'div',
+      {
+       style:{
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:'100%',
+        padding:0,
+        margin:0
+       }
+      },
+      e('h1',null,'Ingredientes'),
+      e(
+       'div',
+       {
+        style:{
+         display:'flex',
+         justifyContent:'space-between',
+         alignItems:'center',
+         border:'1px solid gray',
+         cursor:'pointer',
+         borderRadius:4,
+         padding:8,
+         margin:0
+        },
+        onClick:n=>{
+         const b=x.attributes.recipes.slice();
+         if(b.length)b.splice(i,1);
+         x.setAttributes({recipes:b})
+        }
+       },
+       'Remover',
+       e('span',{style:{margin:'0 0 0 8px'},className:'dashicon dashicons dashicons-remove'})
+      )
+     ),
+     e(
+      h,
+      {
+       key:'FBGrichtextIngredients',
+       tagName:'ul',
+       style:{listStyleType:'disc'},
+       onChange:n=>{
+        const a=n.replace(/^<li[^>]*>/gi,'')
+         .replace(/<\/li>$/gi,'')
+          .replace(/<\/li><li[^>]*>/gi,'#|#')
+          .split('#|#'),
+         b=x.attributes.recipes.slice();
+        if(b.length)b[i].ingredients=a;
+        else b.push({ingredients:a,method:[]});
+        x.setAttributes({recipes:b})
+       },
+       multiline:'li',
+       value:`<li>${(x.attributes.recipes.length?x.attributes.recipes:[{ingredients:[],method:[]}])[i].ingredients.join('</li><li>')}</li>`,
+       placeholder:'Receita'
+     }),
+     e(
+      'div',
+      {
+       style:{
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:'100%',
+        padding:0,
+        margin:0
+       }
+      },
+      !!x.attributes.recipes.length&&!!x.attributes.recipes[i].noMethod?
+      e('span'):
+      e('h1',null,'Modo de preparo'),
+      e(
+       'div',
+       {
+        style:{
+         display:'flex',
+         justifyContent:'space-between',
+         alignItems:'center',
+         cursor:'pointer',
+         padding:8,
+         margin:0
+        },
+        onClick:n=>{
+         const b=x.attributes.recipes.slice();
+         if(b.length)b[i].noMethod=!b[i].noMethod;
+         x.setAttributes({recipes:b})
+        }
+       },
+       e('span',{style:{margin:'0 0 0 8px'},className:'dashicon dashicons dashicons-'+(!!x.attributes.recipes.length&&!!x.attributes.recipes[i].noMethod?'yes':'no')})
+      )
+     ),
+     !!x.attributes.recipes.length&&!!x.attributes.recipes[i].noMethod?
+     e('span'):
+     e(
+      h,
+      {
+       key:'FBGrichtextMethod',
+       tagName:'ul',
+       style:{listStyleType:'decimal'},
+       onChange:n=>{
+        const a=n.replace(/^<li[^>]*>/gi,'')
+         .replace(/<\/li>$/gi,'')
+          .replace(/<\/li><li[^>]*>/gi,'#|#')
+          .split('#|#'),
+         b=x.attributes.recipes.slice();
+        if(x.attributes.recipes.length)b[i].method=a;
+        else b.push({ingredients:[],method:a});
+        x.setAttributes({recipes:b})
+       },
+       multiline:'li',
+       value:`<li>${(x.attributes.recipes.length?x.attributes.recipes:[{ingredients:[],method:[]}])[i].method.join('</li><li>')}</li>`,
+       placeholder:'Modo de preparo'
+     })
+    )
+   ),
+   e(
+    'div',
+    {
+     style:{
+      display:'flex',
+      justifyContent:'space-between',
+      alignItems:'center',
+      cursor:'pointer',
+      padding:0,
+      margin:0
+     }
+    },
+    e('span'),
+    e(
+     'div',
+     {
+      style:{
+       display:'flex',
+       justifyContent:'space-between',
+       alignItems:'center',
+       border:'1px solid gray',
+       cursor:'pointer',
+       borderRadius:4,
+       padding:8,
+       margin:'4px 0 0 0'
+      },
+      onClick:n=>{
+       const b=x.attributes.recipes.slice();
+       if(!b.length)b.push({ingredients:[],method:[]});
+       b.push({ingredients:[],method:[]});
+       x.setAttributes({recipes:b})
+      }
+     },
+     'Adicionar receita',
+     e('span',{style:{margin:'0 0 0 8px'},className:'dashicon dashicons dashicons-insert'})
     )
    )
+  ),
+  save:x=>e(
+   'div',
+   p.save()
   )
  })
 })({
@@ -1733,6 +1927,7 @@ window.fbgSearch={
   if(r.status===200)
    return (await r.json())
     .map(x=>({
+     id:(new Date).getTime(),
      externalId:x.externalId,
      uri:x.uri,
      title:x.title,

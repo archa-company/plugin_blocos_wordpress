@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Filter Blocks
  * Description:       Plugins de blocos internos da pino e configuração de categorias
- * Version:           1.0.23
+ * Version:           1.0.0
  * Author:            Gilmar Longato
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -15,6 +15,7 @@ class FiltersBlocks{
   'fbg-plugin/enquete',
   'fbg-plugin/postview',
   'fbg-plugin/postslist',
+  'fbg-plugin/recipes',
   'web-stories/embed',
   'yoast-seo/breadcrumbs',
   'yoast/how-to-block',
@@ -126,6 +127,7 @@ class FiltersBlocks{
   ]],$c);
  }
  public function __construct(){
+  add_action('init',[$this,'sin']);
   add_action('admin_menu',[$this,'menu']);
   add_action('admin_init',[$this,'start']);
   add_filter('admin_footer_text','__return_empty_string',11);
@@ -213,7 +215,17 @@ class FiltersBlocks{
   }
   add_action('enqueue_block_editor_assets',function(){
    wp_enqueue_script('fbg-plugin',plugin_dir_url(__FILE__).'js.js',array('wp-blocks','wp-i18n','wp-editor','wp-components'),true,false);
+   wp_enqueue_script('fbg-plugin-posts',plugin_dir_url(__FILE__).'jsPosts.js',array('wp-edit-post'),false,false);
   });
+ }
+ public function sin(){
+  register_post_meta('post','citySign',[
+   'show_in_rest'=>true,
+   'single'=>true,
+   'type'=>'string',
+   'sanitize_callback'=>'sanitize_text_field',
+   'auth_callback'=>function(){return current_user_can('edit_posts');}
+  ]);
  }
  public function menu(){
   add_options_page(
@@ -255,9 +267,9 @@ class FiltersBlocks{
     <div>
      <h1>Título da categoria na página</h1>
      <div style="display:grid;grid-template-columns:150px 300px;grid-template-rows:repeat(2,1fr);grid-column-gap:0px;grid-row-gap:10px;width:500px">
-      <label for="checkTitleCategory">Usar Autor:</label>
+      <label for="checkTitleCategory">Usar Padrão:</label>
       <label class="FBGswitch">
-       <input type="checkbox" name="isAuthor" id="checkTitleCategory" checked="true">
+       <input type="checkbox" name="isDefault" id="checkTitleCategory" checked="true">
        <span class="FBGslider FBGround"></span>
       </label>
       <label for="titleCategory" style="display:none" id="label1">Título da categoria:</label>
@@ -316,7 +328,7 @@ window.fbgSelectClass={
 window.fbgCategorySearch={
  categories:[],
  r:i=>{fbgCategorySearch.categories.splice(i,1);fbgCategorySearch.k()},
- i:()=>{fbgCategorySearch.categories.push({id:Math.max(...(!!fbgCategorySearch.categories.length?fbgCategorySearch.categories.map(x=>x.id):[0]))+1,image:'',name:'',url:'',title:null});fbgCategorySearch.k()},
+ i:()=>{fbgCategorySearch.categories.push({id:Math.max(...(!!fbgCategorySearch.categories.length?fbgCategorySearch.categories.map(x=>x.id):[0]))+1,image:'',name:'',url:''});fbgCategorySearch.k()},
  c:(e,k,i)=>{fbgCategorySearch.categories[i][k]=e;fbgCategorySearch.k(true)},
  u:x=>x.replace(/(https?:)?(\/\/)?([^\?#]*)(([\?#])(.*))?.*/gi,(m,a,b,c,d,e,f)=>
   !!c||!!a?`${!!a?`${a}${!!b?b:''}`:''}${!!c?c
@@ -417,7 +429,18 @@ window.fbgCategorySearch={
   document.getElementById('fbgSponsorShips').innerHTML='...loading...<br/><div class="FBGloader"></div>';
   try{
    const r=await fetch(<?php echo "`https://$o.s3.amazonaws.com/$p/" ?>${c.split(';')[1]}.json`);
-   if(r.status===200)fbgCategorySearch.categories=(await r.json()).data.map((x,i)=>({id:i,...x}));
+   if(r.status===200){
+    const d=await r.json(),
+     a=!!d.isDefault?'none':'block',
+     b=document.getElementById('label1'),
+     c=document.getElementById('titleCategory')
+     f=document.getElementById('checkTitleCategory');
+    fbgCategorySearch.categories=d.data.map((x,i)=>({id:i,...x}));
+    f.checked=!!d.isDefault;
+    b.style.display=a;
+    c.style.display=a;
+    c.value=d.title
+   }
    else fbgCategorySearch.categories=[]
   }catch{fbgCategorySearch.categories=[]}
   fbgCategorySearch.k()
@@ -425,7 +448,7 @@ window.fbgCategorySearch={
 };
 (()=>{
  const s=document.getElementById('fbgSelectCategory');
- document.getElementById('fbgSelectCategory').addEventListener('change',e=>fbgCategorySearch.show(e.target.value))
+ s.addEventListener('change',e=>fbgCategorySearch.show(e.target.value))
  if(!!s.value)fbgCategorySearch.show(s.value)
 })()
   </script>
