@@ -845,7 +845,7 @@ window.fbgposts=[];
          key:l.externalId,
          data:l.id,
          draggable:true,
-         onDrop:e=>fbgSelect.dragEnd((e,y)=>x.setAttributes({
+         onDrop:e=>fbgSelect.dragEnd(e,y=>x.setAttributes({
           posts:x.attributes.posts.slice()
            .reorder(y).slice()
          })),
