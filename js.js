@@ -1633,6 +1633,7 @@ window.fbgposts=[];
         className:'FBGselect',
         onChange:n=>x.setAttributes({level:n.target.value})
        },
+       e('option',{value:'',selected:true,style:{display:'none'}},'Selecionar Nível'),
        e('option',{value:'Fácil'},'Fácil'),
        e('option',{value:'Médio'},'Médio'),
        e('option',{value:'Difícil'},'Difícil')
