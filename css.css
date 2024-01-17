@@ -557,6 +557,45 @@ input:checked+.FBGslider:before {
  -webkit-border-radius:50%;-moz-border-radius:50%;-ms-border-radius:50%;-o-border-radius:50%;-khtml-border-radius:50%;border-radius:50%;
  animation:fbgspin 4s linear infinite
 }
+.FBGMenuH{
+ display:flex;
+ flex-direction:row;
+ padding:12px;
+ align-items:center;
+ font-weight:bolder;
+ margin:0;
+ justify-content:space-between;
+ width:100%;
+ z-index:9998;
+ border:1px solid gray;
+ border-radius:4px
+}
+.FBGMenuH LI{
+ cursor:pointer
+}
+.FBGMenuH LI:hover{
+ text-decoration:underline
+}
+.FBGSelMenuH{
+ display:flex;
+ padding:4px
+}
+.FBGSelMenuH:hover UL{
+ display:block
+}
+.FBGSubmenuH{
+ display:none;
+ list-style:none;
+ width:200px;
+ max-height:300px;
+ position:absolute;
+ margin:40px 0 0 -165px;
+ z-index:9999;
+ border:1px solid gray;
+ border-radius:4px;
+ overflow:hidden;
+ overflow-y:auto
+}
 @keyframes fbgloadanim{
  from{margin-left:0;width:0}
  50%{margin-left:0;width:50%}

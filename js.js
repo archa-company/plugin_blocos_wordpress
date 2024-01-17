@@ -1202,7 +1202,7 @@ window.fbgposts=[];
     e(
      v,
      {title:'Posts'},
-     e('p',null,'Selecione os posts de destaque:'),
+     e('p',null,'Selecione os posts para a lista:'),
      e(
       'div',
       {
@@ -1802,6 +1802,274 @@ window.fbgposts=[];
    'div',
    p.save()
   )
+ });
+ l.b.registerBlockType('fbg-plugin/categories-menu',{
+  title:'Menu horizontal de Categorias',
+  description:'Cria um menu de categorias selecionadas',
+  icon:'button',
+  category:'fbg-plugin-category',
+  attributes:{
+   categories:{
+    type:'array',
+    default:[]
+   },
+   allCategories:{
+    type:'boolean',
+    default:false
+   },
+   color:{
+    type:'string',
+    default:'#806f59'
+   },
+   backgroundColor:{
+    type:'string',
+    default:'#b9dae2'
+   },
+   submenu:{
+    type:'boolean',
+    default:false
+   }
+  },
+  edit:x=>e(
+   'div',
+   p(),
+   e(
+    j,
+    {style:{marginBottom:40}},
+    e(
+     v,
+     {title:'Categorias'},
+     e('p',null,'Selecione as categorias para o menu:'),
+     e(
+      'div',
+      {
+       style:{
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center',
+        border:'1px solid gray',
+        cursor:'pointer',
+        borderRadius:4,
+        padding:8,
+        margin:0
+       },
+       onClick:n=>window.fbgSearch.show(p=>{
+        x.attributes.categories.unshift({...p});
+        x.setAttributes({
+         categories:x.attributes.categories.slice(),
+         temp:''
+        })
+       },true)
+      },
+      'Selecionar Categoria',
+      e('span',{className:'dashicon dashicons dashicons-search'})
+     ),
+     e(
+      'ul',
+      {className:'FBGListControls'},
+      x.attributes.categories.map((l,i)=>
+       e(
+        'li',
+        {
+         key:l.id,
+         data:l.id,
+         draggable:true,
+         onDrop:e=>fbgSelect.dragEnd(e,y=>x.setAttributes({
+          categories:x.attributes.categories.slice()
+           .reorder(y).slice()
+         })),
+         onDragOver:e=>fbgSelect.dragOver(e),
+         onDrag:e=>fbgSelect.dragStart(e)
+        },
+        e(
+         'span',
+         {
+          value:l.title,
+          style: {
+           overflow:'hidden',
+           whiteSpace:'nowrap'
+          }
+         },
+         l.title
+        ),
+        e(
+         'span',
+         {
+          className:'set dashicon dashicons dashicons-admin-generic',
+          style: {
+           color:x.attributes.id===i?'blue':'black'
+          },
+          onClick:()=>x.setAttributes({id:x.attributes.id===i?undefined:i})
+         }
+        ),
+        e(
+         'span',
+         {
+          onClick:()=>{
+           x.attributes.categories.splice(i,1);
+           x.setAttributes({categories:x.attributes.categories.slice()})
+          }
+         }
+        )
+       )
+      )
+     )
+    ),
+    e(
+     v,
+     {title:'Todas as Categorias'},
+     e('p',null,'Exibir todas as categorias?'),
+     e(
+      'div',
+      null,
+      e(
+       'label',
+       {
+        className:'FBGswitch'
+       },
+       e(
+        'input',
+        {
+         type:'checkbox',
+         checked:x.attributes.allCategories,
+         onChange:n=>x.setAttributes({allCategories:n.target.checked})
+        }
+       ),
+       e('span',{className:'FBGslider FBGround'})
+      )
+     )
+    ),
+    e(
+     v,
+     {title:'Cor do Texto'},
+     e('p',null,'Selecione a cor do texto:'),
+     e(
+      z,
+      {
+       value:x.attributes.color,
+       onChange:n=>x.setAttributes({color:n})
+      }
+     )
+    ),
+    e(
+     v,
+     {title:'Cor de Fundo'},
+     e('p',null,'Selecione a cor de fundo:'),
+     e(
+      z,
+      {
+       value:x.attributes.backgroundColor,
+       onChange:n=>x.setAttributes({backgroundColor:n})
+      }
+     )
+    )
+   ),
+   e(
+    b,
+    {
+     key:'controls'
+    },
+    e(
+     'div',
+     {
+      style:{
+       display:'flex',
+       justifyContent:'center',
+       alignItems:'center',
+       cursor:'pointer',
+       padding:8,
+       margin:0
+      },
+      onClick:n=>window.fbgSearch.show(p=>{
+        x.attributes.categories.unshift({...p});
+        x.setAttributes({
+         categories:x.attributes.categories.slice(),
+         temp:''
+        })
+       },true)
+     },
+     e('span',{className:'dashicon dashicons dashicons-search'})
+    )
+   ),
+   e(
+    'div',
+    {
+     className:'FBGMenuH',
+     style:{
+      color:x.attributes.color,
+      backgroundColor:x.attributes.backgroundColor
+     }
+    },
+    e(
+     'span',
+     {
+      style:{
+       whiteSpace:'nowrap'
+      }
+     },
+     window.fbgData?.menu||'MENU'
+    ),
+    e(
+     'ul',{
+      style:{
+       listStyle:'none',
+       display:'flex',
+       flexDirection:'row',
+       alignItems:'center'
+      }
+     },
+     (x.attributes.allCategories?
+      window.fbgCategories:
+      x.attributes.categories).slice(0,3).map(l=>
+      e(
+       'li',
+       {key:l.id,style:{padding:4,borderRight:'1px solid gray'}},
+       l.name
+      )
+     ),
+     (x.attributes.allCategories?
+      window.fbgCategories:
+      x.attributes.categories).length>3?
+     e(
+       'li',
+       {
+        key:l.id,
+        style:{
+         padding:4,
+         display:'flex'
+        },
+        onClick:e=>x.setAttributes({submenu:!x.attributes.submenu})
+       },
+       e('span',{className:'dashicon dashicons dashicons-arrow-down'}),
+       e(
+        'ul',
+        {
+         className:'FBGSubmenuH',
+         style:{
+          display:x.attributes.submenu?'block':'none',
+          color:x.attributes.color,
+          backgroundColor:x.attributes.backgroundColor
+         }
+        },
+        (x.attributes.allCategories?
+         window.fbgCategories:
+         x.attributes.categories).slice(3).map(l=>
+         e(
+          'li',
+          {key:l.id},
+          l.name
+         )
+        )
+       )
+      ):
+      ''
+    )
+   )
+  ),
+  save:x=>e(
+   'div',
+   p.save()
+  )
  })
 })({
  b:window.wp.blocks,
@@ -1821,6 +2089,30 @@ window.fbgposts=[];
  }
 )();
 Array.prototype.reorder=function(x,y){return _.sortBy(this,e=>_.indexOf(x,e[y||'id']))};
+window.getParentByTag=(o,t)=>{
+ while(o.nodeName.toUpperCase()!==t.toUpperCase()&&o.nodeName.toUpperCase()!=='BODY')
+  o=o.parentElement;
+ return o;
+}
+(async()=>{
+ window.fbgCategories=[];
+ try{window.fbgData=await(await fetch("/wp-json/fbgfilter/data")).json()}
+ catch{}
+ const g=async p=>{
+  const h=window.location;
+  return (await(
+   await fetch(
+    `${h.protocol}//${h.host}/wp-json/wp/v2/categories?per_page=100&page=${p}&orderby=name`
+  ))
+   .json())
+   .map(x=>({id:x.id,name:x.name,url:x.link.length>9?x.link.substring(x.link.indexOf("/category/")+9):x.link,description:x.description,slug:x.slug}))
+ };
+ let l=[],p=1;
+ do{
+  l=await g(p++);
+  if(l.length>0)window.fbgCategories=window.fbgCategories.concat(l)
+ }while(l.length>0)
+})();
 window.fbgSelect={
  selected:null,
  n:(x,y)=>{
@@ -1868,7 +2160,7 @@ window.fbgSearch={
  z:null,
  n:null,
  g:false,
- r:async()=>{
+ r:async(c)=>{
   if(fbgSearch.g)return;
   fbgSearch.g=true;
   const o=fbgSearch.n.getElementsByTagName('table')[0],
@@ -1877,13 +2169,16 @@ window.fbgSearch={
   o.innerHTML='';
   r=document.createElement('tr');
   r.setAttribute('key','0');
-  ['Título','Categoria','Data de Publicação'].map(x=>{
+  (c?['Título','URL']:['Título','Categoria','Data de Publicação']).map(x=>{
    d=document.createElement('th');
    d.innerHTML=x;
    r.appendChild(d)
   });
   o.appendChild(r);
-  (await fbgSearch.a(i.value)).map((y,i)=>{
+  (c?window.fbgCategories
+   .filter(x=>x.name.includes(i.value))
+   .slice(0,20):
+  (await fbgSearch.a(i.value))).map((y,i)=>{
    r=document.createElement('tr');
    r.post=y;
    r.setAttribute('key',(i+1).toString());
@@ -1899,7 +2194,7 @@ window.fbgSearch={
     );
     fbgSearch.c()
    };
-   ['title','category','createdAt'].map(x=>{
+   (c?['name','url']:['title','category','createdAt']).map(x=>{
     d=document.createElement('td');
     d.innerHTML=y[x];
     r.appendChild(d)
@@ -1940,7 +2235,7 @@ window.fbgSearch={
     }));
   else return []
  },
- show:f=>{
+ show:(f,c=false)=>{
   let t,e;
   fbgSearch.f=f;
   fbgSearch.z=document.createElement('div');
@@ -1990,7 +2285,7 @@ window.fbgSearch={
   t=document.createElement('input');
   t.type='text';
   t.style.width='calc(100% - 32px)';
-  t.onkeyup=e=>{if('Enter'===event.key)fbgSearch.r()};
+  t.onkeyup=e=>{if('Enter'===event.key)fbgSearch.r(c)};
   e.appendChild(t);
   t=document.createElement('div');
   t.className='dashicon dashicons dashicons-search';
@@ -2002,7 +2297,7 @@ window.fbgSearch={
   t.style.display='inline-flex';
   t.style.justifyContent='center';
   t.style.alignItems='center';
-  t.onclick=()=>fbgSearch.r();
+  t.onclick=()=>fbgSearch.r(c);
   e.appendChild(t);
   t=document.createElement('tr');
   e=document.createElement('td');
@@ -2016,6 +2311,6 @@ window.fbgSearch={
   e.appendChild(t);
   e=document.createElement('table');
   t.appendChild(e);
-  fbgSearch.r()
+  fbgSearch.r(c)
  }
 };
