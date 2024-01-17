@@ -552,7 +552,7 @@ window.fbgposts=[];
      e(
       m,
       {
-       value:x.attributes.image||'',
+       value:x.attributes.image,
        type:'image',
        onSelect:n=>x.setAttributes({image:n.sizes?n.sizes.full.url:n.url}),
        render:x=>e(
@@ -1041,7 +1041,7 @@ window.fbgposts=[];
      e(
       m,
       {
-       value:x.attributes.image||'',
+       value:x.attributes.image,
        type:'image',
        onSelect:n=>{
         const v={...x.attributes.post};
@@ -1317,7 +1317,7 @@ window.fbgposts=[];
        e(
         m,
         {
-         value:x.attributes.posts[x.attributes.id]?.thumbnail||'',
+         value:x.attributes.posts[x.attributes.id]?.thumbnail,
          type:'image',
          onSelect:n=>{
           const i=x.attributes.id,
@@ -1940,7 +1940,7 @@ window.fbgposts=[];
      e(
       m,
       {
-       value:x.attributes.image||'',
+       value:x.attributes.image,
        type:'image',
        onSelect:n=>x.setAttributes({image:n.sizes?n.sizes.full.url:n.url}),
        render:x=>e(
