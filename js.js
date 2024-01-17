@@ -1817,6 +1817,10 @@ window.fbgposts=[];
     type:'boolean',
     default:false
    },
+   image:{
+    type:'string',
+    default:''
+   },
    color:{
     type:'string',
     default:'#806f59'
@@ -1884,23 +1888,13 @@ window.fbgposts=[];
         e(
          'span',
          {
-          value:l.title,
+          value:l.name,
           style: {
            overflow:'hidden',
            whiteSpace:'nowrap'
           }
          },
-         l.title
-        ),
-        e(
-         'span',
-         {
-          className:'set dashicon dashicons dashicons-admin-generic',
-          style: {
-           color:x.attributes.id===i?'blue':'black'
-          },
-          onClick:()=>x.setAttributes({id:x.attributes.id===i?undefined:i})
-         }
+         l.name
         ),
         e(
          'span',
@@ -1937,6 +1931,28 @@ window.fbgposts=[];
        ),
        e('span',{className:'FBGslider FBGround'})
       )
+     )
+    ),
+    e(
+     v,
+     {title:'Logo'},
+     e('p',null,'Selecione uma imagem para a logo do menu:'),
+     e(
+      m,
+      {
+       value:x.attributes.image,
+       type:'image',
+       onSelect:n=>x.setAttributes({image:n.sizes?n.sizes.full.url:n.url}),
+       render:x=>e(
+        u,
+        {
+         onClick:x.open,
+         icon:'upload',
+         className:'editor-media-placeholder__button is-button is-default is-large'
+        },
+        'Logo'
+       )
+      }
      )
     ),
     e(
@@ -2001,13 +2017,14 @@ window.fbgposts=[];
      }
     },
     e(
-     'span',
+     'img',
      {
+      src:x.attributes.image||'',
       style:{
-       whiteSpace:'nowrap'
+       height:40,
+       width:'auto'
       }
-     },
-     window.fbgData?.menu||'MENU'
+     }
     ),
     e(
      'ul',{
@@ -2096,8 +2113,6 @@ window.getParentByTag=(o,t)=>{
 }
 (async()=>{
  window.fbgCategories=[];
- try{window.fbgData=await(await fetch("/wp-json/fbgfilter/data")).json()}
- catch{}
  const g=async p=>{
   const h=window.location;
   return (await(

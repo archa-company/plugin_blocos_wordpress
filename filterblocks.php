@@ -148,20 +148,6 @@ class FiltersBlocks{
    'callback'=>[$this,'search'],
    'permission_callback'=>'__return_true'
   ]);
-  register_rest_route('fbgfilter','data',[
-   'methods'=>'GET',
-   'callback'=>[$this,'getData'],
-   'permission_callback'=>'__return_true'
-  ]);
- }
- public function getData(WP_REST_Request $q){
-  $r=new WP_REST_Response([
-   'menu'=>get_option('fbg-plugin-name',''),
-   'block'=>get_option('fbg-plugin-title','')
-  ]);
-  $r->set_status(200);
-  $r->header('Content-Type','application/json');
-  return $r;
  }
  public function search(WP_REST_Request $q){
   $u=get_option('fbg-plugin-url','');
@@ -201,8 +187,6 @@ class FiltersBlocks{
   wp_enqueue_style('stylefbg',plugin_dir_url(__FILE__).'css.css');
   add_settings_section('FBGsectionBlock','Configurações','','FBGFiltersGroup');
   add_settings_section('FBGsection','Blocos',[$this,'section_callback'],'FBGFiltersGroup');
-  register_setting('FBGFiltersGroup','fbg-plugin-name',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
-  add_settings_field('fbg-plugin-name','Título do Menu',[$this,'textbox_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-name']);
   register_setting('FBGFiltersGroup','fbg-plugin-title',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
   add_settings_field('fbg-plugin-title','Categoria',[$this,'textbox_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-title']);
   register_setting('FBGFiltersGroup','fbg-plugin-url',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
