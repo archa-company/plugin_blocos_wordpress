@@ -2037,10 +2037,20 @@ window.fbgposts=[];
      },
      (x.attributes.allCategories?
       window.fbgCategories:
-      x.attributes.categories).slice(0,3).map(l=>
+      x.attributes.categories).slice(0,3).map((l,i)=>
       e(
        'li',
-       {key:l.id,style:{padding:4,borderRight:'1px solid gray'}},
+       {
+        key:l.id,
+        style:{
+         padding:4,
+         borderRight:(x.attributes.allCategories?
+          window.fbgCategories:
+          x.attributes.categories).length>3||i<2?
+          '1px solid gray':
+          undefined
+        }
+       },
        l.name
       )
      ),
