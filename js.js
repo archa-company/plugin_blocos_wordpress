@@ -1871,7 +1871,7 @@ window.fbgposts=[];
      e(
       'ul',
       {className:'FBGListControls'},
-      x.attributes.categories.map((l,i)=>
+      x.attributes.categories?.map((l,i)=>
        e(
         'li',
         {
@@ -1925,7 +1925,7 @@ window.fbgposts=[];
         'input',
         {
          type:'checkbox',
-         checked:x.attributes.allCategories,
+         checked:!!x.attributes.allCategories,
          onChange:n=>x.setAttributes({allCategories:n.target.checked})
         }
        ),
@@ -2035,18 +2035,18 @@ window.fbgposts=[];
        alignItems:'center'
       }
      },
-     (x.attributes.allCategories?
-      window.fbgCategories:
-      x.attributes.categories).slice(0,3).map((l,i)=>
+     (!!x.attributes.allCategories?
+      (window.fbgCategories||[]):
+      (x.attributes.categories||[])).slice(0,3).map((l,i)=>
       e(
        'li',
        {
         key:l.id,
         style:{
          padding:4,
-         borderRight:(x.attributes.allCategories?
-          window.fbgCategories:
-          x.attributes.categories).length>3||i<2?
+         borderRight:(!!x.attributes.allCategories?
+          (window.fbgCategories||[]):
+          (x.attributes.categories||[])).length>3||i<2?
           '1px solid gray':
           undefined
         }
@@ -2054,9 +2054,9 @@ window.fbgposts=[];
        l.name
       )
      ),
-     (x.attributes.allCategories?
-      window.fbgCategories:
-      x.attributes.categories).length>3?
+     (!!x.attributes.allCategories?
+      (window.fbgCategories||[]):
+      (x.attributes.categories||[])).length>3?
      e(
        'li',
        {
@@ -2073,14 +2073,14 @@ window.fbgposts=[];
         {
          className:'FBGSubmenuH',
          style:{
-          display:x.attributes.submenu?'block':'none',
+          display:!!x.attributes.submenu?'block':'none',
           color:x.attributes.color,
           backgroundColor:x.attributes.backgroundColor
          }
         },
-        (x.attributes.allCategories?
-         window.fbgCategories:
-         x.attributes.categories).slice(3).map(l=>
+        (!!x.attributes.allCategories?
+         (window.fbgCategories||[]):
+         (x.attributes.categories||[])).slice(3).map(l=>
          e(
           'li',
           {key:l.id},
