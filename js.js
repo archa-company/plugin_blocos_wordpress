@@ -2194,7 +2194,7 @@ window.fbgSearch={
   o.innerHTML='';
   r=document.createElement('tr');
   r.setAttribute('key','0');
-  (c?['Título','URL']:['Título','Categoria','Data de Publicação']).map(x=>{
+  (c?[null,'Título','URL']:[null,'Título','Categoria','Data de Publicação']).map(x=>{
    d=document.createElement('th');
    d.innerHTML=x;
    r.appendChild(d)
@@ -2219,9 +2219,9 @@ window.fbgSearch={
     );
     fbgSearch.c()
    };
-   (c?['name','url']:['title','category','createdAt']).map(x=>{
+   (c?[null,'name','url']:[null,'title','category','createdAt']).map(x=>{
     d=document.createElement('td');
-    d.innerHTML=y[x];
+    d.innerHTML=!x?y['thumbnail']?`<img src="${y['thumbnail']}">`:'':x==='createdAt'?(new Date(y[x]).toLocaleString()):y[x];
     r.appendChild(d)
    })
    o.appendChild(r)

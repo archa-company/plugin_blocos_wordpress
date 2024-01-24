@@ -263,6 +263,16 @@ input:checked+.FBGslider:before {
  white-space:nowrap
 }
 .FBGSelection table th:first-child{
+ width:1%
+}
+.FBGSelection table td:first-child img{
+ width:80px;
+ height:80px;
+ margin:4px 8px 1px 2px;
+ border-radius:8px;
+ object-fit:cover
+}
+.FBGSelection table th:nth-child(2){
  width:100%
 }
 .FBGSelection table tr:nth-child(odd) td{
