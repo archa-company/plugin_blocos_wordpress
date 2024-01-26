@@ -89,7 +89,7 @@
          {
           id:'FBGswitchPostLayout',
           type:'checkbox',
-          checked:n.meta!=='standard',
+          checked:!!n.meta&&n.meta!=='standard',
           onChange:v=>n.setMeta(v.target.checked?'layout_2':'standard')
          }
         ),
