@@ -224,6 +224,13 @@ class FiltersBlocks{
    'sanitize_callback'=>'sanitize_text_field',
    'auth_callback'=>function(){return current_user_can('edit_posts');}
   ]);
+  register_post_meta('post','postLayout',[
+   'show_in_rest'=>true,
+   'single'=>true,
+   'type'=>'string',
+   'sanitize_callback'=>'sanitize_text_field',
+   'auth_callback'=>function(){return current_user_can('edit_posts');}
+  ]);
  }
  public function menu(){
   add_options_page(
