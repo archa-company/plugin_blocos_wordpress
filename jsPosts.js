@@ -99,6 +99,63 @@
      )
     )
    }
+  ),
+  g=l.d.compose(
+   l.f.withSelect(x=>{
+    const a=x("core/editor"),
+     b=a?.getEditedPostAttribute("meta");
+    return{
+     meta:b["advertisingNews"]??false,
+     postType:a?.getPostTypeLabel()?.toLowerCase()??''
+    }
+   }),
+   l.f.withDispatch(x=>({
+    setMeta:v=>x("core/editor").editPost({meta:{advertisingNews:v}})
+   }))
+  )(
+   n=>{
+    if(n.postType!=='post')return null;
+    else return e(
+     k,
+     {
+      name:'advertisingNewsField',
+      title:'Publicidade',
+      initialOpen:true,
+      icon:'money-alt'
+     },
+     e(
+      p,
+      null,
+      e(
+       'div',
+       null,
+       e(
+        'label',
+        {
+         for:'FBGswitchAdvertisingNews'
+        },
+        'Ativar Publicidade'
+       ),
+       e(
+        'label',
+        {
+         className:'FBGswitch'
+        },
+        e(
+         'input',
+         {
+          id:'FBGswitchAdvertisingNews',
+          type:'checkbox',
+          checked:n.meta,
+          onChange:v=>n.setMeta(v.target.checked)
+         }
+        ),
+        e('span',{className:'FBGslider FBGround'})
+       )
+      )
+     )
+    )
+   }
   );
  l.b.registerPlugin(
   'city-sign-plugin',
@@ -112,6 +169,13 @@
   {
    icon:'admin-appearance',
    render:({postType,meta,setMeta})=>e(h)
+  }
+ );
+ l.b.registerPlugin(
+  'advertising-news-plugin',
+  {
+   icon:'money-alt',
+   render:({postType,meta,setMeta})=>e(g)
   }
  )
 })({
