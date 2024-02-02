@@ -105,7 +105,7 @@
     const a=x("core/editor"),
      b=a?.getEditedPostAttribute("meta");
     return{
-     meta:b["advertisingNews"]??false,
+     meta:!!b?!!b["advertisingNews"]??false:false,
      postType:a?.getPostTypeLabel()?.toLowerCase()??''
     }
    }),
