@@ -145,6 +145,30 @@ class FiltersBlocks{
    'callback'=>[$this,'search'],
    'permission_callback'=>'__return_true'
   ]);
+  register_rest_route('fbgfilter','json/(?P<category>.+)',[
+   'methods'=>'GET',
+   'callback'=>[$this,'getJson'],
+   'permission_callback'=>'__return_true',
+   'args'=>[
+    'category'=>[
+     'validate_callback'=>function($p,$q,$k){
+      return trim($p);
+     }
+    ]
+   ]
+  ]);
+ }
+ public function getJson(WP_REST_Request $q){
+  $h=$q->get_params();
+  if(empty($h['category']))
+   return new WP_Error('rest_content_type_error','Content Type inválido',['status'=>415]);
+  $u='https://'.get_option('fbg-plugin-bucket','').'.s3.amazonaws.com/'.get_option('fbg-plugin-path','').'/'.$h['category'].'.json';
+  $e=wp_remote_get("$u");
+  if(is_wp_error($e))return [];
+  $r=new WP_REST_Response(json_decode(wp_remote_retrieve_body($e),true));
+  $r->set_status(200);
+  $r->header('Content-Type','application/json');
+  return $r;
  }
  public function search(WP_REST_Request $q){
   $u=get_option('fbg-plugin-url','');
@@ -253,8 +277,6 @@ class FiltersBlocks{
  }
  public function categories_menu(){
   $c=get_categories();
-  $o=get_option('fbg-plugin-bucket','');
-  $p=get_option('fbg-plugin-path','');
   wp_enqueue_media();
  ?>
   <div class="FBGcontainer">
@@ -434,7 +456,7 @@ window.fbgCategorySearch={
   fbgCategorySearch.n=c;
   document.getElementById('fbgSponsorShips').innerHTML='...loading...<br/><div class="FBGloader"></div>';
   try{
-   const r=await fetch(<?php echo "`https://$o.s3.amazonaws.com/$p/" ?>${c.split(';')[1]}.json`);
+   const r=await fetch(`/wp-json/fbgfilter/json/${c.split(';')[1]}/`);
    if(r.status===200){
     const d=await r.json(),
      a=!!d.isDefault?'none':'block',
