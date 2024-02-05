@@ -156,6 +156,64 @@
      )
     )
    }
+  ),
+  m=l.d.compose(
+   l.f.withSelect(x=>{
+    const a=x("core/editor"),
+     b=a?.getEditedPostAttribute("meta");
+    return{
+     meta:!!b?!!b["lastPosts"]??false:false,
+     postType:a?.getPostTypeLabel()?.toLowerCase()??''
+    }
+   }),
+   l.f.withDispatch(x=>({
+    setMeta:v=>x("core/editor").editPost({meta:{lastPosts:v}})
+   }))
+  )(
+   n=>{
+    if(n.postType!=='post')return null;
+    else return e(
+     k,
+     {
+      name:'lastPostsField',
+      title:'Posts recentes',
+      initialOpen:true,
+      icon:'list-view'
+     },
+     e(
+      p,
+      null,
+      e(
+       'div',
+       null,
+       e(
+        'label',
+        {
+         for:'FBGswitchLastPosts'
+        },
+        e('span',{className:'dashicon dashicons dashicons-no'}),
+        'Desativar posts recentes automático'
+       ),
+       e(
+        'label',
+        {
+         className:'FBGswitch'
+        },
+        e(
+         'input',
+         {
+          id:'FBGswitchLastPosts',
+          type:'checkbox',
+          checked:n.meta,
+          onChange:v=>n.setMeta(v.target.checked)
+         }
+        ),
+        e('span',{className:'FBGslider FBGround'})
+       )
+      )
+     )
+    )
+   }
   );
  l.b.registerPlugin(
   'city-sign-plugin',
@@ -176,6 +234,13 @@
   {
    icon:'money-alt',
    render:({postType,meta,setMeta})=>e(g)
+  }
+ );
+ l.b.registerPlugin(
+  'last-posts-plugin',
+  {
+   icon:'list-view',
+   render:({postType,meta,setMeta})=>e(m)
   }
  )
 })({

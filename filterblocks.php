@@ -217,27 +217,21 @@ class FiltersBlocks{
   });
  }
  public function sin(){
-  register_post_meta('post','citySign',[
-   'show_in_rest'=>true,
-   'single'=>true,
-   'type'=>'string',
-   'sanitize_callback'=>'sanitize_text_field',
-   'auth_callback'=>function(){return current_user_can('edit_posts');}
-  ]);
-  register_post_meta('post','postLayout',[
-   'show_in_rest'=>true,
-   'single'=>true,
-   'type'=>'string',
-   'sanitize_callback'=>'sanitize_text_field',
-   'auth_callback'=>function(){return current_user_can('edit_posts');}
-  ]);
-  register_post_meta('post','advertisingNews',[
-   'show_in_rest'=>true,
-   'single'=>true,
-   'type'=>'boolean',
-   'sanitize_callback'=>'sanitize_text_field',
-   'auth_callback'=>function(){return current_user_can('edit_posts');}
-  ]);
+  $c=[
+   ['name'=>'citySign','type'=>'string'],
+   ['name'=>'postLayout','type'=>'string'],
+   ['name'=>'advertisingNews','type'=>'boolean'],
+   ['name'=>'lastPosts','type'=>'boolean']
+  ];
+  foreach($c as $v){
+   register_post_meta('post',$v['name'],[
+    'show_in_rest'=>true,
+    'single'=>true,
+    'type'=>$v['type'],
+    'sanitize_callback'=>'sanitize_text_field',
+    'auth_callback'=>function(){return current_user_can('edit_posts');}
+   ]);
+  }
  }
  public function menu(){
   add_options_page(
