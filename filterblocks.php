@@ -192,16 +192,6 @@ class FiltersBlocks{
   add_settings_field('fbg-plugin-user','User do Elastic',[$this,'textbox_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-user']);
   register_setting('FBGFiltersGroup','fbg-plugin-pass',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
   add_settings_field('fbg-plugin-pass','Password do Elastic',[$this,'password_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-pass']);
-  register_setting('FBGFiltersGroup','fbg-plugin-bucket',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
-  add_settings_field('fbg-plugin-bucket','Bucket do S3',[$this,'textbox_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-bucket']);
-  register_setting('FBGFiltersGroup','fbg-plugin-region',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
-  add_settings_field('fbg-plugin-region','Região do S3',[$this,'textbox_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-region']);
-  register_setting('FBGFiltersGroup','fbg-plugin-path',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
-  add_settings_field('fbg-plugin-path','Diretório do S3',[$this,'textbox_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-path']);
-  register_setting('FBGFiltersGroup','fbg-plugin-accesskey',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
-  add_settings_field('fbg-plugin-accesskey','Chave de Acesso (Opcional)',[$this,'password_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-accesskey']);
-  register_setting('FBGFiltersGroup','fbg-plugin-secretkey',['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>'sanitize_text_field','show_in_rest'=>false]);
-  add_settings_field('fbg-plugin-secretkey','Chave Secreta (Opcional)',[$this,'password_callback'],'FBGFiltersGroup','FBGsectionBlock',['label_for'=>'fbg-plugin-secretkey']);
   foreach($this->listBlocks as $v){
    register_setting('FBGFiltersGroup',"fbg-$v",['type'=>'string','group'=>'FBGFiltersGroup','description'=>'','sanitize_callback'=>[$this,'sanitize_checkbox'],'show_in_rest'=>false]);
    add_settings_field("fbg-$v",substr($v,strpos($v,'/')+1),[$this,'checkbox_callback'],'FBGFiltersGroup','FBGsection',['label_for'=>"fbg-$v"]);
@@ -260,9 +250,4 @@ class FiltersBlocks{
  public function remove_footer_admin(){return '';}
 }
 $i=new FiltersBlocks();
-if(isset($_GET['m'])){
- add_action('admin_notices',function(){
-  ?><div class="notice notice-<?php echo (!isset($_GET['e'])?'success':'error') ?> is-dismissible"><p><?php echo $_GET['m'] ?></p></div><?php
- });
-}
 ?>
